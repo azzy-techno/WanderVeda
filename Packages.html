@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderVeda - Travel Packages</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+        
+        :root {
+            --orange: #ffa500;
+            --dark: #333;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-transform: capitalize;
+            outline: none;
+            border: none;
+            text-decoration: none;
+            transition: all .2s linear;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        *::selection {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-padding-top: 6rem;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: var(--dark);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background-color: var(--dark);
+            display: flex;
+            z-index: 1000;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 9%;
+        }
+
+        header .logo {
+            font-size: 2.5rem;
+            font-weight: bolder;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        header .logo span {
+            color: var(--orange);
+        }
+
+        header .nav-bar a {
+            color: #fff;
+            font-size: 2rem;
+            margin: 0 .8rem;
+        }
+
+        header .nav-bar a:hover {
+            color: var(--orange);
+        }
+
+        header .icons i {
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 2rem;
+        }
+
+        header .icons i:hover {
+            color: var(--orange);
+        }
+
+        #menu-bar {
+            color: #fff;
+            border: 1rem solid #fff;
+            border-radius: .5rem;
+            font-size: 2rem;
+            padding: .1rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Packages Content */
+        .packages-page {
+            padding: 10rem 9% 5rem;
+            min-height: 100vh;
+        }
+
+        .heading {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .heading::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10rem;
+            height: .5rem;
+            background: var(--orange);
+        }
+
+        /* Package Filter */
+        .package-filter {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .filter-group {
+            flex: 1 1 20rem;
+        }
+
+        .filter-group h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 1.2rem;
+            border: .1rem solid rgba(0, 0, 0, .1);
+            font-size: 1.6rem;
+            color: var(--dark);
+            border-radius: .5rem;
+        }
+
+        .filter-btn {
+            display: inline-block;
+            background-color: var(--orange);
+            color: #fff;
+            padding: 1.2rem 3.5rem;
+            border: .2rem solid var(--orange);
+            cursor: pointer;
+            font-size: 1.8rem;
+            border-radius: .5rem;
+            margin-top: 1.8rem;
+        }
+
+        .filter-btn:hover {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: var(--orange);
+        }
+
+        /* Package Cards */
+        .package-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
+            gap: 3rem;
+        }
+
+        .package-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .package-card:hover {
+            transform: translateY(-1rem);
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+        }
+
+        .package-image {
+            height: 25rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .package-card:hover .package-image img {
+            transform: scale(1.1);
+        }
+
+        .package-price {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--orange);
+        }
+
+        .package-duration {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1.4rem;
+        }
+
+        .package-content {
+            padding: 2rem;
+        }
+
+        .package-title {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .package-location {
+            font-size: 1.6rem;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .package-location i {
+            margin-right: 0.5rem;
+        }
+
+        .package-description {
+            font-size: 1.5rem;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .package-features {
+            margin-bottom: 2rem;
+        }
+
+        .feature-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            font-size: 1.5rem;
+            color: var(--gray);
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li i {
+            color: var(--orange);
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .package-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: .1rem solid #eee;
+            padding-top: 1.5rem;
+        }
+
+        .package-rating {
+            font-size: 1.6rem;
+            color: var(--orange);
+        }
+
+        .package-rating i {
+            margin-right: 0.3rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--orange);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border: .2rem solid var(--orange);
+            cursor: pointer;
+            font-size: 1.6rem;
+            border-radius: .5rem;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: var(--orange);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 9%;
+            text-align: center;
+        }
+
+        .footer .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer .box h3 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .footer .box p, .footer .box a {
+            color: #ddd;
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .footer .box a:hover {
+            color: var(--orange);
+            text-decoration: underline;
+        }
+
+        .footer .credit {
+            font-size: 2rem;
+            padding-top: 2rem;
+            border-top: .1rem solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer .credit span {
+            color: var(--orange);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            header {
+                padding: 2rem 5%;
+            }
+            
+            .packages-page {
+                padding: 10rem 5% 5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .package-container {
+                grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+            }
+            
+            .footer .box-container {
+                grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            #menu-bar {
+                display: initial;
+            }
+            
+            header .nav-bar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark);
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: 0.3s;
+            }
+            
+            header .nav-bar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            header .nav-bar a {
+                display: block;
+                margin: 2rem;
+                padding: 1rem;
+                background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.1), transparent);
+                border-bottom: .1rem solid rgba(255, 165, 0, 0.2);
+                font-size: 2rem;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .footer .box h3 {
+                font-size: 2.2rem;
+            }
+            
+            .footer .box p, .footer .box a {
+                font-size: 1.6rem;
+            }
+            
+            .footer .credit {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .heading {
+                font-size: 3rem;
+            }
+            
+            .packages-page {
+                padding: 10rem 2rem 5rem;
+            }
+            
+            .package-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer .box-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer .box h3 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="menu-bar" class="fas fa-bars"></div>
+        <a href="index.html" class="logo"><span>Wander</span>Veda</a>
+        <nav class="nav-bar">
+            <a href="index.html">Home</a>
+            <a href="#book">Book</a>
+            <a href="packages.html" class="active">Packages</a>
+            <a href="#itineraries">Itineraries</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+        <div class="icons">
+            <a href="profile.html"><i class="fas fa-user"></i></a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </header>
+
+    <section class="packages-page">
+        <h1 class="heading">
+            <span>P</span>
+            <span>a</span>
+            <span>c</span>
+            <span>k</span>
+            <span>a</span>
+            <span>g</span>
+            <span>e</span>
+            <span>s</span>
+        </h1>
+
+        <div class="package-filter">
+            <div class="filter-options">
+                <div class="filter-group">
+                    <h3>Destination</h3>
+                    <select>
+                        <option value="">All Destinations</option>
+                        <option value="kerala">Kerala</option>
+                        <option value="ladakh">Ladakh</option>
+                        <option value="goa">Goa</option>
+                        <option value="rajasthan">Rajasthan</option>
+                        <option value="himachal">Himachal Pradesh</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <h3>Duration</h3>
+                    <select>
+                        <option value="">Any Duration</option>
+                        <option value="3-5">3-5 Days</option>
+                        <option value="6-8">6-8 Days</option>
+                        <option value="9+">9+ Days</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <h3>Price Range</h3>
+                    <select>
+                        <option value="">Any Price</option>
+                        <option value="0-500">Under $500</option>
+                        <option value="500-1000">$500 - $1000</option>
+                        <option value="1000+">Over $1000</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <h3>Travel Type</h3>
+                    <select>
+                        <option value="">Any Type</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="relaxation">Relaxation</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="family">Family</option>
+                    </select>
+                </div>
+            </div>
+            <button class="filter-btn">Filter Packages</button>
+        </div>
+
+        <div class="package-container">
+            <!-- Package 1 - Kerala Backwaters -->
+            <div class="package-card">
+                <div class="package-image">
+                    <img src="https://images.unsplash.com/photo-1582972236019-ea9e6d8b8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Kerala Backwaters">
+                    <div class="package-price">$450</div>
+                    <div class="package-duration">5 Days / 4 Nights</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">Premium Kerala Backwaters</h3>
+                    <div class="package-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Alleppey, Kerala
+                    </div>
+                    <p class="package-description">
+                        Experience the serene backwaters of Kerala on a luxury houseboat with private balcony and panoramic views. Includes guided village tours and authentic Kerala cuisine.
+                    </p>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Accommodations:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 2 Nights in Deluxe Houseboat with AC</li>
+                            <li><i class="fas fa-check"></i> 2 Nights in 4-star Resort</li>
+                            <li><i class="fas fa-check"></i> Private balcony with backwater views</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Features:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Daily Ayurvedic spa treatments</li>
+                            <li><i class="fas fa-check"></i> Sunset cruise with champagne</li>
+                            <li><i class="fas fa-check"></i> Private chef for onboard meals</li>
+                            <li><i class="fas fa-check"></i> Guided village cycling tour</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Nearby Restaurants:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-utensils"></i> <strong>Thaff Delicacy</strong> (0.5km) - Authentic Kerala seafood</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Harbour Restaurant</strong> (1.2km) - Fresh catch of the day</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Spice Garden</strong> (2km) - Traditional thali meals</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <div class="package-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            (28 reviews)
+                        </div>
+                        <a href="#" class="btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package 2 - Ladakh Adventure -->
+            <div class="package-card">
+                <div class="package-image">
+                    <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Ladakh Adventure">
+                    <div class="package-price">$850</div>
+                    <div class="package-duration">7 Days / 6 Nights</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">Ladakh Extreme Adventure</h3>
+                    <div class="package-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Leh, Ladakh
+                    </div>
+                    <p class="package-description">
+                        Thrilling 7-day adventure through the Himalayas with camping, trekking and local cultural experiences. Includes professional guides and all equipment.
+                    </p>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Accommodations:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 2 Nights in 3-star Leh hotel</li>
+                            <li><i class="fas fa-check"></i> 4 Nights in luxury adventure camps</li>
+                            <li><i class="fas fa-check"></i> Heated tents with attached bathrooms</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Features:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Chadar Trek (Frozen River Walk)</li>
+                            <li><i class="fas fa-check"></i> Pangong Lake overnight camping</li>
+                            <li><i class="fas fa-check"></i> Monastery visits with local guide</li>
+                            <li><i class="fas fa-check"></i> Oxygen cylinders and medical support</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Nearby Restaurants:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-utensils"></i> <strong>Tibetan Kitchen</strong> (0.3km) - Authentic momos & thukpa</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Lamayuru Restaurant</strong> (0.8km) - Traditional Ladakhi cuisine</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Summer Harvest</strong> (1.5km) - Organic cafe with mountain views</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <div class="package-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            (42 reviews)
+                        </div>
+                        <a href="#" class="btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package 3 - Goa Beach -->
+            <div class="package-card">
+                <div class="package-image">
+                    <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Goa Beach">
+                    <div class="package-price">$650</div>
+                    <div class="package-duration">4 Days / 3 Nights</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">Goa Beach Paradise</h3>
+                    <div class="package-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        North Goa
+                    </div>
+                    <p class="package-description">
+                        Luxury beachfront resort stay with private beach access, water sports, and sunset cruises. Perfect for couples and families looking to unwind.
+                    </p>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Accommodations:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 3 Nights in 5-star beach resort</li>
+                            <li><i class="fas fa-check"></i> Private beach cabana</li>
+                            <li><i class="fas fa-check"></i> Ocean view rooms with balcony</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Features:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Daily breakfast buffet</li>
+                            <li><i class="fas fa-check"></i> Sunset dolphin cruise with cocktails</li>
+                            <li><i class="fas fa-check"></i> Scuba diving introduction</li>
+                            <li><i class="fas fa-check"></i> Ayurvedic spa package</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Nearby Restaurants:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-utensils"></i> <strong>Fisherman's Wharf</strong> (0.2km) - Famous for seafood platters</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Pousada by the Beach</strong> (0.5km) - Authentic Goan vindaloo</li>
+                            <li><i class="fas fa-utensils"></i> <strong>La Plage</strong> (1km) - French fine dining on the beach</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <div class="package-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            (35 reviews)
+                        </div>
+                        <a href="#" class="btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package 4 - Rajasthan Heritage -->
+            <div class="package-card">
+                <div class="package-image">
+                    <img src="https://images.unsplash.com/photo-1565498255681-4b7aef054962?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Rajasthan Heritage">
+                    <div class="package-price">$750</div>
+                    <div class="package-duration">6 Days / 5 Nights</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">Rajasthan Royal Experience</h3>
+                    <div class="package-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Jaipur, Udaipur & Jodhpur
+                    </div>
+                    <p class="package-description">
+                        Explore the royal heritage of Rajasthan with stays in palace hotels, elephant rides at Amber Fort, and desert camp experiences under the stars.
+                    </p>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Accommodations:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 2 Nights in Jaipur Heritage Palace</li>
+                            <li><i class="fas fa-check"></i> 2 Nights in Udaipur Lake Palace</li>
+                            <li><i class="fas fa-check"></i> 1 Night in Jodhpur Desert Camp</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Features:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Private guided tours of all forts</li>
+                            <li><i class="fas fa-check"></i> Elephant ride at Amber Fort</li>
+                            <li><i class="fas fa-check"></i> Traditional folk dance dinner</li>
+                            <li><i class="fas fa-check"></i> Hot air balloon ride over Jaipur</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Nearby Restaurants:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-utensils"></i> <strong>1135 AD</strong> (Amber Fort) - Royal dining in palace</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Upre by 1559 AD</strong> (0.5km) - Rooftop with fort views</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Laxmi Misthan Bhandar</strong> (1km) - Famous for pyaaz kachori</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <div class="package-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            (51 reviews)
+                        </div>
+                        <a href="#" class="btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package 5 - Himalayan Trek -->
+            <div class="package-card">
+                <div class="package-image">
+                    <img src="https://images.unsplash.com/photo-1581852017103-68e8115e1e47?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Himalayan Trek">
+                    <div class="package-price">$950</div>
+                    <div class="package-duration">8 Days / 7 Nights</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">Himalayan Trekking Expedition</h3>
+                    <div class="package-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Manali, Himachal Pradesh
+                    </div>
+                    <p class="package-description">
+                        Challenging 8-day trek through the Himalayas with breathtaking views. Includes professional guides, all camping equipment, and acclimatization days.
+                    </p>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Accommodations:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 2 Nights in Manali boutique hotel</li>
+                            <li><i class="fas fa-check"></i> 5 Nights in luxury trekking camps</li>
+                            <li><i class="fas fa-check"></i> Heated tents with mountain views</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Features:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Professional mountain guides</li>
+                            <li><i class="fas fa-check"></i> All trekking equipment provided</li>
+                            <li><i class="fas fa-check"></i> Daily yoga sessions at camps</li>
+                            <li><i class="fas fa-check"></i> Medical support and oxygen</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Nearby Restaurants:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-utensils"></i> <strong>Johnson's Cafe</strong> (0.1km) - Famous apple pie</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Dylan's Toasted & Roasted</strong> (0.3km) - Best coffee in town</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Il Forno</strong> (0.5km) - Authentic Italian wood-fired pizza</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <div class="package-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            (23 reviews)
+                        </div>
+                        <a href="#" class="btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package 6 - Andaman Islands -->
+            <div class="package-card">
+                <div class="package-image">
+                    <img src="https://images.unsplash.com/photo-1581852057101-8517f991a42c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Andaman Beaches">
+                    <div class="package-price">$1200</div>
+                    <div class="package-duration">7 Days / 6 Nights</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">Andaman Luxury Escape</h3>
+                    <div class="package-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Havelock & Neil Islands
+                    </div>
+                    <p class="package-description">
+                        Tropical paradise vacation with private island hopping, scuba diving certification, and beachfront villa stay. Includes all transfers and water activities.
+                    </p>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Accommodations:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 4 Nights in beachfront villa</li>
+                            <li><i class="fas fa-check"></i> 2 Nights in overwater bungalow</li>
+                            <li><i class="fas fa-check"></i> Private plunge pools</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Features:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> PADI Scuba certification course</li>
+                            <li><i class="fas fa-check"></i> Private yacht island hopping</li>
+                            <li><i class="fas fa-check"></i> Glass bottom kayaking</li>
+                            <li><i class="fas fa-check"></i> Sunset beach dinners</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-features">
+                        <h4 class="feature-title">Nearby Restaurants:</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-utensils"></i> <strong>Full Moon Cafe</strong> (0.2km) - Beachfront dining</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Anju Coco Resto</strong> (0.5km) - Fresh seafood BBQ</li>
+                            <li><i class="fas fa-utensils"></i> <strong>Red Snapper</strong> (1km) - Fine dining with wine pairing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <div class="package-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            (47 reviews)
+                        </div>
+                        <a href="#" class="btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="box-container">
+            <div class="box">
+                <h3>About us</h3>
+                <p>WanderVeda is your premier travel companion, offering curated experiences across India's most beautiful destinations. We specialize in creating unforgettable journeys.</p>
+            </div>
+            <div class="box">
+                <h3>Branch locations</h3>
+                <a href="#">Kerala</a>
+                <a href="#">Tamil Nadu</a>
+                <a href="#">Karnataka</a>
+                <a href="#">Ladakh</a>
+                <a href="#">Gujarat</a>
+            </div>
+            <div class="box">
+                <h3>Quick links</h3>
+                <a href="index.html">Home</a>
+                <a href="packages.html">Packages</a>
+                <a href="#itineraries">Itineraries</a>
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+            <div class="box">
+                <h3>Follow us</h3>
+                <a href="#"><i class="fab fa-facebook-f"></i> Facebook
